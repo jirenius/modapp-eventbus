@@ -1,0 +1,30 @@
+{
+    "env": {
+        "test": {
+            "presets": [
+                ["@babel/env"]
+            ]
+        },
+        "commonjs": {
+            "presets": [
+                ["@babel/env", {
+                    "useBuiltIns": false
+                }]
+            ],
+            "ignore": [
+                "**/*.test.js"
+            ]
+        },
+        "es": {
+            "presets": [
+                ["@babel/env", {
+                    "useBuiltIns": false,
+                    "modules": false
+                }]
+            ],
+            "ignore": [
+                "**/*.test.js"
+            ]
+        }
+    }
+}

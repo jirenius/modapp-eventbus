@@ -1,0 +1,13 @@
+/node_modules
+/coverage
+/package-lock.json
+/yarn.lock
+
+# Build files.
+/dist
+/lib
+/es
+/*.tgz
+
+# Editor specifics
+.vscode/*
