@@ -4,7 +4,8 @@ import { terser } from "rollup-plugin-terser";
 export default {
 	input: 'src/index.js',
 	output: {
-		name: 'modapp-base-component',
+		name: 'modapp-eventbus',
+		format: 'umd',
 		exports: 'named'
 	},
 	plugins: [
