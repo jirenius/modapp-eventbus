@@ -5,7 +5,8 @@ export default {
 	input: 'src/index.js',
 	output: {
 		name: 'modapp-eventbus',
-		format: 'umd'
+		format: 'umd',
+		exports: 'named'
 	},
 	plugins: [
 		babel({ babelHelpers: 'bundled' }),
