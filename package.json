@@ -1,6 +1,6 @@
 {
   "name": "modapp-eventbus",
-  "version": "1.0.1",
+  "version": "1.7.0",
   "description": "EventBus used for implementing modapp's Model interface, Collection interface, and LocaleString interface.",
   "main": "lib/index.js",
   "module": "es/index.js",
