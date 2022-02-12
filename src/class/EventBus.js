@@ -212,7 +212,11 @@ class EventBus {
 			let f;
 			while (cb = this._qh.shift()) {
 				f = cb.pop();
-				f(...cb);
+				try {
+					f(...cb);
+				} catch (e) {
+					console.error(e);
+				}
 			}
 			this._qh = null;
 		}, 0);
