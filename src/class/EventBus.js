@@ -30,8 +30,8 @@ class EventBus {
 	 * Creates an event bus.
 	 */
 	constructor() {
-		this._evs = {};
-		this._qh = null;
+		Object.defineProperty(this, "_evs", { value: {}, enumerable: false });
+		Object.defineProperty(this, "_qh", { value: null, enumerable: false, writable: true });
 	}
 
 	/**
@@ -43,7 +43,7 @@ class EventBus {
 	 * @returns {this}
 	 */
 	on(target, events, handler, namespace) {
-		var i, hs, name, h;
+		let i, hs, name, h;
 
 		// Detect optional parameters
 		if (typeof events == 'function') {
