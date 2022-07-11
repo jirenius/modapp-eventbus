@@ -9,7 +9,8 @@
   "files": [
     "dist",
     "lib",
-    "es"
+    "es",
+    "index.d.ts"
   ],
   "scripts": {
     "clean": "rimraf lib dist es coverage docs && mkdir docs",
