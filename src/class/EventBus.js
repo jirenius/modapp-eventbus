@@ -1,15 +1,17 @@
-const rm = function(hs, t, h) {
-	if (!hs) {
-		return;
-	}
-
-	var e, i = hs.length;
-	while (i--) {
-		e = hs[i];
-		if ((t === null || e.t === t) && (h === null || h === e.h)) {
-			hs.splice(i, 1);
+const rm = function(hs, t, h, strict) {
+	if (hs) {
+		var e, i = hs.length;
+		while (i--) {
+			e = hs[i];
+			if ((e.t === t || (t === null && !strict)) && (h === e.h || (h === null && !strict))) {
+				hs.splice(i, 1);
+				if (strict) {
+					return true;
+				}
+			}
 		}
 	}
+	return !strict;
 };
 
 /**
@@ -54,10 +56,6 @@ class EventBus {
 			target = null;
 		}
 
-		if (!handler) {
-			return this;
-		}
-
 		h = { t: target || null, h: handler };
 
 		if (!events) {
@@ -97,14 +95,16 @@ class EventBus {
 	 * @param {?string} events One or more space-separated events (eg. 'disconnect'). Null or empty means any event.
 	 * @param {function} [handler] An option handler function. The handler will only be remove if it is the same handler.
 	 * @param {string} [namespace] Namespace string that will be added, separated with a dot, to every event name.
+	 * @param {boolean} [strict] Flag for strict mode where an error will be thrown if the handler doesn't exist.
 	 * @returns {this}
 	 */
-	off(target, events, handler, namespace) {
+	off(target, events, handler, namespace, strict) {
 		var i, hs, name;
 
 		// Detect optional parameters
 		if (target === null || typeof target == 'string') {
 			// (events, handler, namespace)
+			strict = namespace;
 			namespace = handler;
 			handler = events;
 			events = target;
@@ -112,39 +112,28 @@ class EventBus {
 		}
 
 		if (!events) {
-			name = namespace || "";
+			events = [ namespace || "" ];
+			namespace = "";
+		} else {
+			namespace = namespace ? namespace + '.' : '';
+			// Handle multiple events separated by a space.
+			events = events.match(/\S+/g) || [];
+		}
+
+		for (i = 0; i < events.length; i++) {
+			name = namespace + events[i];
 
 			hs = this._evs[name];
+			if (!rm(hs, target, handler, strict)) {
+				throw new Error("Event handler not found", { cause: { target: target, events: events, handler: handler, namespace: namespace }});
+			}
 			// No event handlers for event
 			if (!hs) {
-				return this;
+				continue;
 			}
-
-			rm(hs, target, handler);
 			// Delete array if empty
 			if (!hs.length) {
 				delete this._evs[name];
-			}
-		} else {
-			namespace = namespace ? namespace + '.' : '';
-
-			// Handle multiple events separated by a space.
-			events = events.match(/\S+/g) || [];
-
-			for (i = 0; i < events.length; i++) {
-				name = namespace + events[i];
-
-				hs = this._evs[name];
-				// No event handlers for event
-				if (!hs) {
-					continue;
-				}
-
-				rm(hs, target, handler);
-				// Delete array if empty
-				if (!hs.length) {
-					delete this._evs[name];
-				}
 			}
 		}
 
@@ -182,7 +171,7 @@ class EventBus {
 				i = hs.length;
 				while (i--) {
 					h = hs[i];
-					if (h.t === null || h.t == target) {
+					if (typeof h.h == 'function' && (h.t === null || h.t == target)) {
 						this._exec([ data, target, event, action, h.h ]);
 					}
 				}
