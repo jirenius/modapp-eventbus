@@ -9,7 +9,7 @@ EventBus is a bus for subscribing to and emitting events.
     * [new EventBus()](#new_EventBus_new)
     * _instance_
         * [.on([target], events, handler, [namespace])](#EventBus+on) ⇒ <code>this</code>
-        * [.off([target], events, [handler], [namespace])](#EventBus+off) ⇒ <code>this</code>
+        * [.off([target], events, [handler], [namespace], [strict])](#EventBus+off) ⇒ <code>this</code>
         * [.emit([target], event, [data], [namespace])](#EventBus+emit) ⇒ <code>this</code>
     * _inner_
         * [~eventCallback](#EventBus..eventCallback) : <code>function</code>
@@ -35,7 +35,7 @@ Attach an event handler function for one or more events.
 
 <a name="EventBus+off"></a>
 
-### eventBus.off([target], events, [handler], [namespace]) ⇒ <code>this</code>
+### eventBus.off([target], events, [handler], [namespace], [strict]) ⇒ <code>this</code>
 Remove an event handler.
 
 **Kind**: instance method of [<code>EventBus</code>](#EventBus)  
@@ -46,6 +46,7 @@ Remove an event handler.
 | events | <code>string</code> | One or more space-separated events (eg. 'disconnect'). Null or empty means any event. |
 | [handler] | <code>function</code> | An option handler function. The handler will only be remove if it is the same handler. |
 | [namespace] | <code>string</code> | Namespace string that will be added, separated with a dot, to every event name. |
+| [strict] | <code>boolean</code> | Flag for strict mode where an error will be thrown if the handler doesn't exist. |
 
 <a name="EventBus+emit"></a>
 
