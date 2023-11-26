@@ -125,7 +125,9 @@ class EventBus {
 
 			hs = this._evs[name];
 			if (!rm(hs, target, handler, strict)) {
-				throw new Error("Event handler not found", { cause: { target: target, events: events, handler: handler, namespace: namespace }});
+				let err = new Error("Event handler not found");
+				console.error(err, { target: target, events: events, handler: handler, namespace: namespace });
+				throw err;
 			}
 			// No event handlers for event
 			if (!hs) {
